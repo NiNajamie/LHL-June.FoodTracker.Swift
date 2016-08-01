@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Takoyaki-Food.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "chickenTacos.jpg",
       "scale" : "2x"
     },
     {

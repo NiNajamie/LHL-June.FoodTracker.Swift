@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MealViewController.swift
 //  LHL-June.FoodTracker.Swift
 //
 //  Created by Asuka Nakagawa on 2016-07-31.
@@ -8,22 +8,32 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     // MARK: Properties
     @IBOutlet weak var nameTextField: UITextField!
-    @IBOutlet weak var mealNameLabel: UILabel!
+//    @IBOutlet weak var mealNameLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ratingControl: RatingControl!
     
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    
+    /*
+     This value is either passed by `MealTableViewController` in `prepareForSegue(_:sender:)`
+     or constructed as part of adding a new meal.
+     */
+    var meal: Meal?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
-    // Handle the textField's user input through delegate callbacks.
-    // 1. textField
-    nameTextField.delegate = self
+        // Handle the textField's user input through delegate callbacks.
+        // 1. textField
+        nameTextField.delegate = self
+        
+        checkValidMealName()        // Enable the Save button only if the text field has a valid Meal name.
+
     
     }
 
@@ -42,8 +52,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
     // may be called if forced even if shouldEndEditing returns NO (e.g. view removed from window) or endEditing:YES called
     // 1-2.
     func textFieldDidEndEditing(textField: UITextField) {
-        mealNameLabel.text = textField.text
+        
+        checkValidMealName()    // check if the text field has text in it, which enables the SaveButton if it does.
+        navigationItem.title = textField.text    // sets the title of the scene to that text.
+
+//        mealNameLabel.text = textField.text
     }
+    
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        // Disable the Save button while editing.
+        saveButton.enabled = false
+    }
+    
+    func checkValidMealName() {
+        // Disable the Save button if the text field is empty.
+        let text = nameTextField.text ?? ""
+        saveButton.enabled = !text.isEmpty
+    }
+    
+    
+    
     
     // 3-1.
     // UIImagePickerControllerDelegate // Dismiss the VC if user canceled.
@@ -61,7 +90,38 @@ class ViewController: UIViewController, UITextFieldDelegate, UIImagePickerContro
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+
+    // MARK: Navigation
+    
+    // This method lets you configure a view controller before it's presented.
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        // identity operator (===) to check that the object referenced by the saveButton outlet is the same object instance as sender
+        if saveButton === sender {
+            
+            /* nil coalescing operator is used to return the value of an optional if the optional has a value, or return a default value otherwise. Here, the operator unwraps the optional String returned by nameTextField.text (which is optional because there may or may not be text in the text field), and returns that value if it’s a valid string. But if it’s nil, the operator the returns the empty string ("") instead. */
+            let name = nameTextField.text ?? ""
+            let photo = photoImageView.image
+            let rating = ratingControl.rating
+            
+            
+            // Set the meal to be passed to MealTableViewController after the unwind segue.
+            meal = Meal(name: name, photo: photo, rating: rating)
+        }
+    }
+    
+    
     // MARK: Actions
+    
+    
+    @IBAction func cancel(sender: UIBarButtonItem) {
+        dismissViewControllerAnimated(true, completion: nil)
+        
+    }
+    
+
+    
+    
     // 2.imagePicker
     @IBAction func selectImageFromPhotoLibrary(sender: UITapGestureRecognizer) {
         
