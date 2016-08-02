@@ -30,7 +30,7 @@
                                                 <constraint firstAttribute="height" constant="21" id="Q0u-Un-v6l"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DF0-V3-B5P" customClass="RatingControl" customModule="LHL_June_FoodTracker_Swift" customModuleProvider="target">
@@ -63,6 +63,7 @@
                                     <outlet property="nameLabel" destination="ASP-2a-ENt" id="dSj-Ni-ajw"/>
                                     <outlet property="photoImageView" destination="Uox-yw-Gl0" id="MLQ-og-xEQ"/>
                                     <outlet property="ratingControl" destination="DF0-V3-B5P" id="doU-g1-2eL"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="showDetail" id="CYo-C5-19T"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -74,14 +75,14 @@
                     <navigationItem key="navigationItem" title="Your Meals" id="2A2-DK-wLP">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="uw2-sd-Wx8">
                             <connections>
-                                <segue destination="v3s-nK-Q1k" kind="presentation" identifier="AddItem" id="EG1-ns-PMv"/>
+                                <segue destination="v3s-nK-Q1k" kind="presentation" identifier="addItem" id="EG1-ns-PMv"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VoS-y8-Zaf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="539" y="308"/>
+            <point key="canvasLocation" x="571" y="308"/>
         </scene>
         <!--New Meal-->
         <scene sceneID="tne-QT-ifu">
@@ -166,7 +167,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1898" y="308"/>
+            <point key="canvasLocation" x="1854" y="308"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qqf-GB-2YS">
@@ -202,10 +203,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BxO-me-yG4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1217" y="308"/>
+            <point key="canvasLocation" x="1209" y="854"/>
         </scene>
     </scenes>
     <resources>
         <image name="defaultPhoto" width="280" height="175"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="1HY-LW-RPu"/>
+    </inferredMetricsTieBreakers>
 </document>

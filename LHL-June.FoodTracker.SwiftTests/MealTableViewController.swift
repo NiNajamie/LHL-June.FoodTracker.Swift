@@ -14,7 +14,6 @@ class MealTableViewController: UITableViewController {
     
     var meals = [Meal]()
     
-    
     func loadSampleMeals() {
         
         let photo1 = UIImage(named: "meal1")!
@@ -36,6 +35,9 @@ class MealTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Use the edit button item provided by the table view controller.
+        navigationItem.leftBarButtonItem = editButtonItem()
         
         loadSampleMeals()
     }
@@ -79,39 +81,45 @@ class MealTableViewController: UITableViewController {
         //  optional type cast operator (as?) to try to downcast the source view controller of the segue to type MealViewController. You need to downcast because sender.sourceViewController is of type UIViewController, but you need to work with MealViewController.
         if let sourceViewController = sender.sourceViewController as? MealViewController, meal = sourceViewController.meal {
             
-            // Add a new meal.
-            let newIndexPath = NSIndexPath(forRow: meals.count, inSection: 0)
-            meals.append(meal)
-            
-            // This animates the addition of a new row to the table view for the cell that contains information about the new meal. The .Bottom animation option shows the inserted row slide in from the bottom.
-            tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
+            if let selectedIndexPath = tableView.indexPathForSelectedRow {
+                // Update an existing meal.
+                meals[selectedIndexPath.row] = meal   //  Updates the appropriate entry in meals to store the updated meal information.
+                tableView.reloadRowsAtIndexPaths([selectedIndexPath], withRowAnimation: .None)  //  reloads the appropriate row in the table view to display the changed data.
+                
+            } else {
+                // Add a new meal.
+                let newIndexPath = NSIndexPath(forRow: meals.count, inSection: 0)
+                meals.append(meal)
+                
+                // This animates the addition of a new row to the table view for the cell that contains information about the new meal. The .Bottom animation option shows the inserted row slide in from the bottom.
+                tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: .Bottom)
+            }
         }
     }
     
     
-    
-    
-    
-    /*
+
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
 
-    /*
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        
         if editingStyle == .Delete {
             // Delete the row from the data source
+            meals.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 
+    
+    
     /*
     // Override to support rearranging the table view.
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
@@ -127,14 +135,29 @@ class MealTableViewController: UITableViewController {
     }
     */
 
-    /*
+
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "showDetail" {
+            
+            // If type cast is successful, the local constant mealDetailViewController gets assigned the value of segue.destinationViewController cast as type MealViewController.
+            let mealDetailViewController = segue.destinationViewController as! MealViewController
+            
+            // Get the cell that generated this segue.
+            if let selectedMealCell = sender as? MealTableViewCell {
+                let indexPath = tableView.indexPathForCell(selectedMealCell)!
+                let selectedMeal = meals[indexPath.row]
+                mealDetailViewController.meal = selectedMeal
+            }
+            
+        } else if segue.identifier == "addItem" {
+
+            print("Adding new meal.")
+            
+        }
     }
-    */
 
 }
